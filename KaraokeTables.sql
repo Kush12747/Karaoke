@@ -1,0 +1,65 @@
+CREATE TABLE User(
+  UserID CHAR(4) PRIMARY KEY,
+  Name VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Song(
+  SongID CHAR(4) PRIMARY KEY,
+  Title VARCHAR(50) NOT NULL,
+  ArtistName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Contributor(
+  ContributorID CHAR(4) PRIMARY KEY,
+  Name VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE KaraokeFile(
+  FileID CHAR(4) NOT NULL,
+  SongID CHAR(4) NOT NULL,
+  Version VARCHAR(30) NOT NULL,
+  PRIMARY KEY(FileID, SongID),
+  FOREIGN KEY(SongID) REFERENCES Song(SongID)
+);
+
+CREATE TABLE Queue(
+  QueueID CHAR(4) PRIMARY KEY,
+  Type CHAR(4) NOT NULL
+);
+
+CREATE TABLE SignUp(
+  UserID CHAR(4) NOT NULL,
+  QueueID CHAR(4) NOT NULL,
+  FileID CHAR(4) NOT NULL,
+  Location INT NOT NULL,
+  AmountPaid INT NOT NULL,
+  PRIMARY KEY(UserID, QueueID, FileID),
+  FOREIGN KEY(UserID) REFERENCES User(UserID),
+  FOREIGN KEY(QueueID) REFERENCES Queue(QueueID),
+  FOREIGN KEY(FileID) REFERENCES KaraokeFile(FileID)
+);
+
+CREATE TABLE IsIn(
+  QueueID CHAR(4) NOT NULL,
+  FileID CHAR(4) NOT NULL,
+  PRIMARY KEY(QueueID, FileID),
+  FOREIGN KEY(QueueID) REFERENCES Queue(QueueID),
+  FOREIGN KEY(FileID) REFERENCES KaraokeFile(FileID)
+);
+
+CREATE TABLE Contains(
+  SongID CHAR(4) NOT NULL,
+  FileID CHAR(4) NOT NULL,
+  PRIMARY KEY(SongID, FileID),
+  FOREIGN KEY(SongID) REFERENCES Song(SongID),
+  FOREIGN KEY(FileID) REFERENCES KaraokeFile(FileID)
+);
+
+CREATE TABLE Contributes(
+  SongID CHAR(4) NOT NULL,
+  ContributorID CHAR(4) NOT NULL,
+  ContributorType VARCHAR (100) NOT NULL,
+  PRIMARY KEY(SongID, ContributorID),
+  FOREIGN KEY(SongID) REFERENCES Song(SongID),
+  FOREIGN KEY(ContributorID) REFERENCES Contributor(ContributorID)
+);
